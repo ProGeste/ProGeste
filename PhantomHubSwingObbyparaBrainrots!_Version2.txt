@@ -8,33 +8,6 @@ local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
 local TweenService = game:GetService("TweenService")
 
--- ===== DPI ADAPTATION SYSTEM =====
-local DPIScale = {}
-function DPIScale:GetScreenSize()
-    local screenSize = PlayerGui.AbsoluteSize
-    return screenSize.X, screenSize.Y
-end
-
-function DPIScale:CalculateScale()
-    local screenX, screenY = self:GetScreenSize()
-    local baseResolution = 1920
-    local scale = screenX / baseResolution
-    return math.max(0.5, math.min(2, scale))
-end
-
-function DPIScale:GetScale()
-    return self:CalculateScale()
-end
-
-function DPIScale:ScaleSize(baseSize)
-    return baseSize * self:GetScale()
-end
-
-function DPIScale:ScaleUDim2(x_scale, x_offset, y_scale, y_offset)
-    local scale = self:GetScale()
-    return UDim2.new(x_scale, x_offset * scale, y_scale, y_offset * scale)
-end
-
 local fileName = "Phantom_" .. tostring(Player.UserId) .. ".json"
 local savedSettings = {}
 
@@ -54,6 +27,17 @@ local function saveSettings()
         end)
     end
 end
+
+local function calculateDPIScale()
+    local screenSize = PlayerGui.AbsoluteSize
+    local baseResolution = Vector2.new(1920, 1080)
+    local scaleX = screenSize.X / baseResolution.X
+    local scaleY = screenSize.Y / baseResolution.Y
+    local scale = math.min(scaleX, scaleY)
+    return math.max(0.5, math.min(scale, 2.0))
+end
+
+local DPI_SCALE = calculateDPIScale()
 
 local optionStates = {}
 
@@ -78,9 +62,8 @@ ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = PlayerGui
 
 local FloatingButton = Instance.new("TextButton")
-local buttonScale = DPIScale:ScaleSize(54)
-FloatingButton.Size = UDim2.new(0, buttonScale, 0, buttonScale)
-FloatingButton.Position = UDim2.new(0, 50 * DPIScale:GetScale(), 0.15, -buttonScale / 2)
+FloatingButton.Size = UDim2.new(0, 54 * DPI_SCALE, 0, 54 * DPI_SCALE)
+FloatingButton.Position = UDim2.new(0, 50, 0.15, -27 * DPI_SCALE)
 FloatingButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 FloatingButton.Text = ""
 FloatingButton.Parent = ScreenGui
@@ -97,8 +80,8 @@ FloatingButtonStroke.Thickness = 2
 FloatingButtonStroke.Parent = FloatingButton
 
 local InnerBtn = Instance.new("Frame")
-InnerBtn.Size = UDim2.new(1, -6 * DPIScale:GetScale(), 1, -6 * DPIScale:GetScale())
-InnerBtn.Position = UDim2.new(0.5, -((buttonScale - 6 * DPIScale:GetScale()) / 2), 0.5, -((buttonScale - 6 * DPIScale:GetScale()) / 2))
+InnerBtn.Size = UDim2.new(0, 48 * DPI_SCALE, 0, 48 * DPI_SCALE)
+InnerBtn.Position = UDim2.new(0.5, -24 * DPI_SCALE, 0.5, -24 * DPI_SCALE)
 InnerBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 InnerBtn.Parent = FloatingButton
 InnerBtn.ZIndex = 1001
@@ -114,12 +97,9 @@ BtnLabel.Image = "rbxassetid://121715364276099"
 BtnLabel.Parent = InnerBtn
 BtnLabel.ZIndex = 1002
 
-local menuWidth = DPIScale:ScaleSize(960)
-local menuHeight = DPIScale:ScaleSize(540)
-
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, menuWidth, 0, menuHeight)
-MainFrame.Position = UDim2.new(0.5, -menuWidth / 2, 0.5, -menuHeight / 2)
+MainFrame.Size = UDim2.new(0.5 * DPI_SCALE, 0, 0.5 * DPI_SCALE, 0)
+MainFrame.Position = UDim2.new(0.25, 0, 0.25, 0)
 MainFrame.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 MainFrame.Visible = false
 MainFrame.Parent = ScreenGui
@@ -134,11 +114,9 @@ MainFrameStroke.Color = Color3.fromRGB(60, 60, 60)
 MainFrameStroke.Thickness = 2
 MainFrameStroke.Parent = MainFrame
 
-local borderScale = DPIScale:ScaleSize(6)
-
 local InnerFrame = Instance.new("Frame")
-InnerFrame.Size = UDim2.new(1, -borderScale, 1, -borderScale)
-InnerFrame.Position = UDim2.new(0, borderScale / 2, 0, borderScale / 2)
+InnerFrame.Size = UDim2.new(1, -6 * DPI_SCALE, 1, -6 * DPI_SCALE)
+InnerFrame.Position = UDim2.new(0, 3 * DPI_SCALE, 0, 3 * DPI_SCALE)
 InnerFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 InnerFrame.Parent = MainFrame
 InnerFrame.ZIndex = 999
@@ -147,10 +125,8 @@ local UICornerInnerF = Instance.new("UICorner")
 UICornerInnerF.CornerRadius = UDim.new(0, 0)
 UICornerInnerF.Parent = InnerFrame
 
-local topBarHeight = DPIScale:ScaleSize(45)
-
 local TopBar = Instance.new("Frame")
-TopBar.Size = UDim2.new(1, 0, 0, topBarHeight)
+TopBar.Size = UDim2.new(1, 0, 0, 45 * DPI_SCALE)
 TopBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 TopBar.Parent = InnerFrame
 TopBar.ZIndex = 999
@@ -165,12 +141,12 @@ TopCorner.CornerRadius = UDim.new(0, 0)
 TopCorner.Parent = TopBar
 
 local ScriptTitle = Instance.new("TextLabel")
-ScriptTitle.Size = UDim2.new(0, 150 * DPIScale:GetScale(), 1, 0)
-ScriptTitle.Position = UDim2.new(0, 10 * DPIScale:GetScale(), 0, 0)
+ScriptTitle.Size = UDim2.new(0, 150 * DPI_SCALE, 1, 0)
+ScriptTitle.Position = UDim2.new(0, 10 * DPI_SCALE, 0, 0)
 ScriptTitle.Text = "Phantom Hub"
 ScriptTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 ScriptTitle.Font = Enum.Font.SourceSansBold
-ScriptTitle.TextSize = 22 * DPIScale:GetScale()
+ScriptTitle.TextSize = 22 * DPI_SCALE
 ScriptTitle.TextXAlignment = Enum.TextXAlignment.Left
 ScriptTitle.BackgroundTransparency = 1
 ScriptTitle.Parent = TopBar
@@ -181,16 +157,14 @@ TitleStroke.Color = Color3.fromRGB(30, 30, 30)
 TitleStroke.Thickness = 1
 TitleStroke.Parent = ScriptTitle
 
-local closeBtnSize = DPIScale:ScaleSize(32)
-
 local CloseBtn = Instance.new("TextButton")
-CloseBtn.Size = UDim2.new(0, closeBtnSize, 0, closeBtnSize)
-CloseBtn.Position = UDim2.new(1, -(42 * DPIScale:GetScale()), 0.5, -closeBtnSize / 2)
+CloseBtn.Size = UDim2.new(0, 32 * DPI_SCALE, 0, 32 * DPI_SCALE)
+CloseBtn.Position = UDim2.new(1, -42 * DPI_SCALE, 0.5, -16 * DPI_SCALE)
 CloseBtn.BackgroundTransparency = 1
 CloseBtn.Text = "X"
 CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseBtn.Font = Enum.Font.SourceSansBold
-CloseBtn.TextSize = 18 * DPIScale:GetScale()
+CloseBtn.TextSize = 18 * DPI_SCALE
 CloseBtn.Parent = TopBar
 CloseBtn.AutoButtonColor = false
 CloseBtn.ZIndex = 999
@@ -199,18 +173,16 @@ local UICornerClose = Instance.new("UICorner")
 UICornerClose.CornerRadius = UDim.new(0, 0)
 UICornerClose.Parent = CloseBtn
 
-local sideBarWidth = DPIScale:ScaleSize(140)
-
 local SideBar = Instance.new("Frame")
-SideBar.Size = UDim2.new(0, sideBarWidth, 1, -topBarHeight)
-SideBar.Position = UDim2.new(0, 0, 0, topBarHeight)
+SideBar.Size = UDim2.new(0, 140 * DPI_SCALE, 1, -45 * DPI_SCALE)
+SideBar.Position = UDim2.new(0, 0, 0, 45 * DPI_SCALE)
 SideBar.BackgroundTransparency = 1
 SideBar.Parent = InnerFrame
 SideBar.ZIndex = 999
 
 local MainContent = Instance.new("ScrollingFrame")
-MainContent.Size = UDim2.new(1, -(sideBarWidth + 10 * DPIScale:GetScale()), 1, -(topBarHeight + 15 * DPIScale:GetScale()))
-MainContent.Position = UDim2.new(0, sideBarWidth + 5 * DPIScale:GetScale(), 0, topBarHeight + 5 * DPIScale:GetScale())
+MainContent.Size = UDim2.new(1, -150 * DPI_SCALE, 1, -60 * DPI_SCALE)
+MainContent.Position = UDim2.new(0, 145 * DPI_SCALE, 0, 45 * DPI_SCALE)
 MainContent.BackgroundTransparency = 1
 MainContent.ScrollBarThickness = 2
 MainContent.CanvasSize = UDim2.new(0, 0, 0, 0)
@@ -230,12 +202,10 @@ local function showNotification(title, iconId, duration)
 	notificationScreenGui.ResetOnSpawn = false
 	notificationScreenGui.Parent = PlayerGui
 	
-	local notifScale = DPIScale:GetScale()
-	
 	local notificationGui = Instance.new("Frame")
 	notificationGui.Name = "NotificationGui"
-	notificationGui.Size = UDim2.new(0, 300 * notifScale, 0, 60 * notifScale)
-	notificationGui.Position = UDim2.new(1, 20 * notifScale, 1, -100 * notifScale)
+	notificationGui.Size = UDim2.new(0, 300 * DPI_SCALE, 0, 60 * DPI_SCALE)
+	notificationGui.Position = UDim2.new(1, 20, 1, -100 * DPI_SCALE)
 	notificationGui.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 	notificationGui.BorderSizePixel = 2
 	notificationGui.BorderColor3 = Color3.fromRGB(128, 128, 128)
@@ -243,19 +213,19 @@ local function showNotification(title, iconId, duration)
 
 	local notificationIcon = Instance.new("ImageLabel")
 	notificationIcon.Name = "NotificationIcon"
-	notificationIcon.Size = UDim2.new(0, 40 * notifScale, 0, 40 * notifScale)
-	notificationIcon.Position = UDim2.new(0, 10 * notifScale, 0.5, -20 * notifScale)
+	notificationIcon.Size = UDim2.new(0, 40 * DPI_SCALE, 0, 40 * DPI_SCALE)
+	notificationIcon.Position = UDim2.new(0, 10 * DPI_SCALE, 0.5, -20 * DPI_SCALE)
 	notificationIcon.BackgroundTransparency = 1
 	notificationIcon.Image = "rbxassetid://" .. iconId
 	notificationIcon.Parent = notificationGui
 
 	local notificationLabel = Instance.new("TextLabel")
 	notificationLabel.Name = "NotificationLabel"
-	notificationLabel.Size = UDim2.new(1, -60 * notifScale, 1, 0)
-	notificationLabel.Position = UDim2.new(0, 50 * notifScale, 0, 0)
+	notificationLabel.Size = UDim2.new(1, -60 * DPI_SCALE, 1, 0)
+	notificationLabel.Position = UDim2.new(0, 50 * DPI_SCALE, 0, 0)
 	notificationLabel.BackgroundTransparency = 1
 	notificationLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-	notificationLabel.TextSize = 14 * notifScale
+	notificationLabel.TextSize = 14 * DPI_SCALE
 	notificationLabel.Font = Enum.Font.Gotham
 	notificationLabel.Text = title
 	notificationLabel.TextWrapped = true
@@ -271,7 +241,7 @@ local function showNotification(title, iconId, duration)
 	progressLine.Parent = notificationGui
 
 	local startTime = tick()
-	local totalWidth = 300 * notifScale
+	local totalWidth = 300 * DPI_SCALE
 	local notificationId = tostring(math.random(100000, 999999))
 
 	notificationTimers[notificationId] = {
@@ -284,7 +254,7 @@ local function showNotification(title, iconId, duration)
 	local slideInTween = TweenService:Create(
 		notificationGui,
 		TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-		{Position = UDim2.new(1, -320 * notifScale, 1, -100 * notifScale)}
+		{Position = UDim2.new(1, -320 * DPI_SCALE, 1, -100 * DPI_SCALE)}
 	)
 	slideInTween:Play()
 
@@ -309,7 +279,7 @@ local function showNotification(title, iconId, duration)
 				local slideOutTween = TweenService:Create(
 					notificationGui,
 					TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-					{Position = UDim2.new(1, 20 * notifScale, 1, -100 * notifScale)}
+					{Position = UDim2.new(1, 20, 1, -100 * DPI_SCALE)}
 				)
 				slideOutTween:Play()
 
@@ -328,18 +298,14 @@ local function showNotification(title, iconId, duration)
 end
 
 local function createTabBtn(name, posIdx, iconId)
-    local scale = DPIScale:GetScale()
-    local btnHeight = DPIScale:ScaleSize(40)
-    local btnSpacing = DPIScale:ScaleSize(50)
-    
     local Btn = Instance.new("TextButton")
-    Btn.Size = UDim2.new(0.85, 0, 0, btnHeight)
-    Btn.Position = UDim2.new(0.075, 0, 0, 20 * scale + (posIdx * btnSpacing))
+    Btn.Size = UDim2.new(0.85, 0, 0, 40 * DPI_SCALE)
+    Btn.Position = UDim2.new(0.075, 0, 0, 20 * DPI_SCALE + (posIdx * 50 * DPI_SCALE))
     Btn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     Btn.Text = ""
     Btn.Font = Enum.Font.SourceSansBold
-    Btn.TextSize = 18 * scale
+    Btn.TextSize = 18 * DPI_SCALE
     Btn.Parent = SideBar
     Btn.AutoButtonColor = false
     Btn.ZIndex = 999
@@ -352,8 +318,8 @@ local function createTabBtn(name, posIdx, iconId)
     BtnContainer.ZIndex = 999
 
     local IconLabel = Instance.new("ImageLabel")
-    IconLabel.Size = UDim2.new(0, 24 * scale, 0, 24 * scale)
-    IconLabel.Position = UDim2.new(0, 8 * scale, 0.5, -12 * scale)
+    IconLabel.Size = UDim2.new(0, 24 * DPI_SCALE, 0, 24 * DPI_SCALE)
+    IconLabel.Position = UDim2.new(0, 8 * DPI_SCALE, 0.5, -12 * DPI_SCALE)
     IconLabel.BackgroundTransparency = 1
     IconLabel.Image = "rbxasset://textures/Cursors/MouseLockedCursor.png"
     if iconId then
@@ -363,14 +329,14 @@ local function createTabBtn(name, posIdx, iconId)
     IconLabel.ZIndex = 999
 
     local TextLabel = Instance.new("TextLabel")
-    TextLabel.Size = UDim2.new(1, -40 * scale, 1, 0)
-    TextLabel.Position = UDim2.new(0, 40 * scale, 0, 0)
+    TextLabel.Size = UDim2.new(1, -40 * DPI_SCALE, 1, 0)
+    TextLabel.Position = UDim2.new(0, 40 * DPI_SCALE, 0, 0)
     TextLabel.BackgroundTransparency = 1
     TextLabel.Text = name
     TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     TextLabel.TextXAlignment = Enum.TextXAlignment.Left
     TextLabel.Font = Enum.Font.SourceSansBold
-    TextLabel.TextSize = 18 * scale
+    TextLabel.TextSize = 18 * DPI_SCALE
     TextLabel.Parent = BtnContainer
     TextLabel.ZIndex = 999
 
@@ -385,20 +351,18 @@ local TabCredits = createTabBtn("Credits", 4, "99243311837005")
 
 local function repositionElements(tab)
     local yPos = 0
-    local spacing = DPIScale:ScaleSize(10)
-    
     for _, elem in ipairs(options[tab]) do
         if elem.Visible then
             elem.Position = UDim2.new(0, 0, 0, yPos)
-            yPos = yPos + elem.Size.Y.Offset + spacing
+            yPos = yPos + elem.Size.Y.Offset + 10 * DPI_SCALE
         end
     end
     
     if tab == "Main" then
-        MainContent.CanvasSize = UDim2.new(0, 0, 0, yPos + 50 * DPIScale:GetScale())
+        MainContent.CanvasSize = UDim2.new(0, 0, 0, yPos + 50 * DPI_SCALE)
         MainContent.CanvasPosition = Vector2.new(0, 0)
     else
-        MainContent.CanvasSize = UDim2.new(0, 0, 0, yPos + 50 * DPIScale:GetScale())
+        MainContent.CanvasSize = UDim2.new(0, 0, 0, yPos + 50 * DPI_SCALE)
     end
 end
 
@@ -415,12 +379,9 @@ local connectionStorage = {}
 local function createOption(name, startActive, tab, callback)
     createOptionState(name, startActive)
     local currentActive = optionStates[name]
-    
-    local scale = DPIScale:GetScale()
-    local containerHeight = DPIScale:ScaleSize(50)
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -16 * scale, 0, containerHeight)
+    Container.Size = UDim2.new(1, -16 * DPI_SCALE, 0, 50 * DPI_SCALE)
     Container.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Container.Visible = (tab == activeTab)
     Container.Parent = MainContent
@@ -441,16 +402,13 @@ local function createOption(name, startActive, tab, callback)
     Label.BackgroundTransparency = 1
     Label.TextXAlignment = Enum.TextXAlignment.Left
     Label.Font = Enum.Font.SourceSans
-    Label.TextSize = 16 * scale
+    Label.TextSize = 16 * DPI_SCALE
     Label.Parent = Container
     Label.ZIndex = 999
 
-    local switchSize = DPIScale:ScaleSize(45)
-    local switchHeight = DPIScale:ScaleSize(24)
-
     local SwitchBG = Instance.new("TextButton")
-    SwitchBG.Size = UDim2.new(0, switchSize, 0, switchHeight)
-    SwitchBG.Position = UDim2.new(1, -55 * scale, 0.5, -switchHeight / 2)
+    SwitchBG.Size = UDim2.new(0, 45 * DPI_SCALE, 0, 24 * DPI_SCALE)
+    SwitchBG.Position = UDim2.new(1, -55 * DPI_SCALE, 0.5, -12 * DPI_SCALE)
     SwitchBG.BackgroundColor3 = currentActive and Color3.fromRGB(100, 150, 200) or Color3.fromRGB(40, 40, 40)
     SwitchBG.Text = ""
     SwitchBG.Parent = Container
@@ -463,11 +421,9 @@ local function createOption(name, startActive, tab, callback)
     SwitchStroke.Thickness = 1
     SwitchStroke.Parent = SwitchBG
 
-    local circleSize = DPIScale:ScaleSize(18)
-
     local Circle = Instance.new("Frame")
-    Circle.Size = UDim2.new(0, circleSize, 0, circleSize)
-    Circle.Position = currentActive and UDim2.new(1, -21 * scale, 0.5, -circleSize / 2) or UDim2.new(0, 3 * scale, 0.5, -circleSize / 2)
+    Circle.Size = UDim2.new(0, 18 * DPI_SCALE, 0, 18 * DPI_SCALE)
+    Circle.Position = currentActive and UDim2.new(1, -21 * DPI_SCALE, 0.5, -9 * DPI_SCALE) or UDim2.new(0, 3 * DPI_SCALE, 0.5, -9 * DPI_SCALE)
     Circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Circle.Parent = SwitchBG
     Circle.ZIndex = 999
@@ -480,7 +436,7 @@ local function createOption(name, startActive, tab, callback)
             optionStates[name] = not optionStates[name]
             setOptionState(name, optionStates[name])
 
-            Circle:TweenPosition(optionStates[name] and UDim2.new(1, -21 * scale, 0.5, -circleSize / 2) or UDim2.new(0, 3 * scale, 0.5, -circleSize / 2), "Out", "Quad", 0.2, true)
+            Circle:TweenPosition(optionStates[name] and UDim2.new(1, -21 * DPI_SCALE, 0.5, -9 * DPI_SCALE) or UDim2.new(0, 3 * DPI_SCALE, 0.5, -9 * DPI_SCALE), "Out", "Quad", 0.2, true)
             SwitchBG.BackgroundColor3 = optionStates[name] and Color3.fromRGB(100, 150, 200) or Color3.fromRGB(40, 40, 40)
 
             if callback then 
@@ -522,12 +478,9 @@ local flySpeed = 32
 local function createSlider(name, min, max, default, tab, callback)
     createOptionState(name, default)
     local currentVal = optionStates[name]
-    
-    local scale = DPIScale:GetScale()
-    local containerHeight = DPIScale:ScaleSize(60)
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -16 * scale, 0, containerHeight)
+    Container.Size = UDim2.new(1, -16 * DPI_SCALE, 0, 60 * DPI_SCALE)
     Container.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Container.Visible = (tab == activeTab)
     Container.Parent = MainContent
@@ -541,18 +494,18 @@ local function createSlider(name, min, max, default, tab, callback)
 
     local Label = Instance.new("TextLabel")
     Label.Size = UDim2.new(0.9, 0, 0.4, 0)
-    Label.Position = UDim2.new(0.05, 0, 0, 5 * scale)
+    Label.Position = UDim2.new(0.05, 0, 0, 5 * DPI_SCALE)
     Label.Text = name .. ": " .. tostring(currentVal)
     Label.TextColor3 = Color3.fromRGB(255, 255, 255)
     Label.BackgroundTransparency = 1
     Label.TextXAlignment = Enum.TextXAlignment.Left
     Label.Font = Enum.Font.SourceSans
-    Label.TextSize = 16 * scale
+    Label.TextSize = 16 * DPI_SCALE
     Label.Parent = Container
     Label.ZIndex = 999
 
     local SliderBG = Instance.new("TextButton")
-    SliderBG.Size = UDim2.new(0.9, 0, 0, 6 * scale)
+    SliderBG.Size = UDim2.new(0.9, 0, 0, 6 * DPI_SCALE)
     SliderBG.Position = UDim2.new(0.05, 0, 0.5, 0)
     SliderBG.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     SliderBG.Text = ""
@@ -569,11 +522,9 @@ local function createSlider(name, min, max, default, tab, callback)
     SliderFill.ZIndex = 999
     Instance.new("UICorner", SliderFill).CornerRadius = UDim.new(0, 0)
 
-    local circleSize = DPIScale:ScaleSize(14)
-
     local Circle = Instance.new("Frame")
-    Circle.Size = UDim2.new(0, circleSize, 0, circleSize)
-    Circle.Position = UDim2.new(1, -7 * scale, 0.5, -7 * scale)
+    Circle.Size = UDim2.new(0, 14 * DPI_SCALE, 0, 14 * DPI_SCALE)
+    Circle.Position = UDim2.new(1, -7 * DPI_SCALE, 0.5, -7 * DPI_SCALE)
     Circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Circle.Parent = SliderFill
     Circle.ZIndex = 999
@@ -586,9 +537,9 @@ local function createSlider(name, min, max, default, tab, callback)
     local dragging = false
     local function updateSlider(input)
         local relativeX = math.clamp(input.Position.X - SliderBG.AbsolutePosition.X, 0, SliderBG.AbsoluteSize.X)
-        local scale_val = relativeX / SliderBG.AbsoluteSize.X
-        SliderFill.Size = UDim2.new(scale_val, 0, 1, 0)
-        local value = math.floor(min + ((max - min) * scale_val))
+        local scale = relativeX / SliderBG.AbsoluteSize.X
+        SliderFill.Size = UDim2.new(scale, 0, 1, 0)
+        local value = math.floor(min + ((max - min) * scale))
         Label.Text = name .. ": " .. tostring(value)
 
         optionStates[name] = value
@@ -623,11 +574,8 @@ local function createSlider(name, min, max, default, tab, callback)
 end
 
 local function createInfoBox(title, desc, tab, isButton, linkToCopy)
-    local scale = DPIScale:GetScale()
-    local containerHeight = DPIScale:ScaleSize(45)
-    
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -16 * scale, 0, containerHeight)
+    Container.Size = UDim2.new(1, -16 * DPI_SCALE, 0, 45 * DPI_SCALE)
     Container.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Container.Visible = (tab == activeTab)
     Container.Parent = MainContent
@@ -641,13 +589,13 @@ local function createInfoBox(title, desc, tab, isButton, linkToCopy)
 
     local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Size = UDim2.new(0.9, 0, 0.5, 0)
-    TitleLabel.Position = UDim2.new(0.05, 0, 0, 3 * scale)
+    TitleLabel.Position = UDim2.new(0.05, 0, 0, 3 * DPI_SCALE)
     TitleLabel.Text = title
     TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     TitleLabel.Font = Enum.Font.SourceSansBold
-    TitleLabel.TextSize = 16 * scale
+    TitleLabel.TextSize = 16 * DPI_SCALE
     TitleLabel.Parent = Container
     TitleLabel.ZIndex = 999
 
@@ -659,7 +607,7 @@ local function createInfoBox(title, desc, tab, isButton, linkToCopy)
     DescLabel.BackgroundTransparency = 1
     DescLabel.TextXAlignment = Enum.TextXAlignment.Left
     DescLabel.Font = Enum.Font.SourceSans
-    DescLabel.TextSize = 12 * scale
+    DescLabel.TextSize = 12 * DPI_SCALE
     DescLabel.Parent = Container
     DescLabel.ZIndex = 999
 
@@ -681,11 +629,8 @@ local function createInfoBox(title, desc, tab, isButton, linkToCopy)
 end
 
 local function createSpecialButton(name, tab, callback)
-    local scale = DPIScale:GetScale()
-    local containerHeight = DPIScale:ScaleSize(50)
-    
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -16 * scale, 0, containerHeight)
+    Container.Size = UDim2.new(1, -16 * DPI_SCALE, 0, 50 * DPI_SCALE)
     Container.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Container.Visible = (tab == activeTab)
     Container.Parent = MainContent
@@ -705,7 +650,7 @@ local function createSpecialButton(name, tab, callback)
     Label.BackgroundTransparency = 1
     Label.TextXAlignment = Enum.TextXAlignment.Center
     Label.Font = Enum.Font.SourceSans
-    Label.TextSize = 16 * scale
+    Label.TextSize = 16 * DPI_SCALE
     Label.Parent = Container
     Label.ZIndex = 999
 
@@ -1542,8 +1487,8 @@ local isShiftLock = createOption("Enable Shift Lock", false, "Config", function(
             shiftLockGui.Parent = PlayerGui
             
             shiftLockBtn = Instance.new("ImageButton")
-            shiftLockBtn.Size = UDim2.new(0, 50 * DPIScale:GetScale(), 0, 50 * DPIScale:GetScale())
-            shiftLockBtn.Position = UDim2.new(0.5, -25 * DPIScale:GetScale(), 0.76, 0)
+            shiftLockBtn.Size = UDim2.new(0, 50 * DPI_SCALE, 0, 50 * DPI_SCALE)
+            shiftLockBtn.Position = UDim2.new(0.5, -25 * DPI_SCALE, 0.76, 0)
             shiftLockBtn.BackgroundTransparency = 1
             shiftLockBtn.Image = "rbxassetid://139211296111194"
             shiftLockBtn.Parent = shiftLockGui
