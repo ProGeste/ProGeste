@@ -53,7 +53,7 @@ ScreenGui.Parent = PlayerGui
 
 local FloatingButton = Instance.new("TextButton")
 FloatingButton.Size = UDim2.new(0.08, 0, 0.12, 0)
-FloatingButton.Position = UDim2.new(0.03, 0, 0.15, 0)
+FloatingButton.Position = UDim2.new(0.025, 0, 0.15, 0)
 FloatingButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 FloatingButton.Text = ""
 FloatingButton.Parent = ScreenGui
@@ -70,8 +70,8 @@ FloatingButtonStroke.Thickness = 2
 FloatingButtonStroke.Parent = FloatingButton
 
 local InnerBtn = Instance.new("Frame")
-InnerBtn.Size = UDim2.new(0.89, 0, 0.89, 0)
-InnerBtn.Position = UDim2.new(0.055, 0, 0.055, 0)
+InnerBtn.Size = UDim2.new(1, -6, 1, -6)
+InnerBtn.Position = UDim2.new(0, 3, 0, 3)
 InnerBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 InnerBtn.Parent = FloatingButton
 InnerBtn.ZIndex = 999999
@@ -88,13 +88,13 @@ BtnLabel.Parent = InnerBtn
 BtnLabel.ZIndex = 999999
 
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0.54, 0, 0.72, 0)
+MainFrame.Size = UDim2.new(0.55, 0, 0.72, 0)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 MainFrame.Visible = false
 MainFrame.Parent = ScreenGui
 MainFrame.ZIndex = 999999
-MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 
 local UICornerFrame = Instance.new("UICorner")
 UICornerFrame.CornerRadius = UDim.new(0, 0)
@@ -106,8 +106,8 @@ MainFrameStroke.Thickness = 2
 MainFrameStroke.Parent = MainFrame
 
 local InnerFrame = Instance.new("Frame")
-InnerFrame.Size = UDim2.new(0.989, 0, 0.981, 0)
-InnerFrame.Position = UDim2.new(0.0055, 0, 0.0095, 0)
+InnerFrame.Size = UDim2.new(1, -6, 1, -6)
+InnerFrame.Position = UDim2.new(0, 3, 0, 3)
 InnerFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 InnerFrame.Parent = MainFrame
 InnerFrame.ZIndex = 999999
@@ -117,7 +117,7 @@ UICornerInnerF.CornerRadius = UDim.new(0, 0)
 UICornerInnerF.Parent = InnerFrame
 
 local TopBar = Instance.new("Frame")
-TopBar.Size = UDim2.new(1, 0, 0.141, 0)
+TopBar.Size = UDim2.new(1, 0, 0.15, 0)
 TopBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 TopBar.Parent = InnerFrame
 TopBar.ZIndex = 999999
@@ -132,8 +132,8 @@ TopCorner.CornerRadius = UDim.new(0, 0)
 TopCorner.Parent = TopBar
 
 local ScriptTitle = Instance.new("TextLabel")
-ScriptTitle.Size = UDim2.new(0.27, 0, 1, 0)
-ScriptTitle.Position = UDim2.new(0.018, 0, 0, 0)
+ScriptTitle.Size = UDim2.new(0.4, 0, 1, 0)
+ScriptTitle.Position = UDim2.new(0.02, 0, 0, 0)
 ScriptTitle.Text = "Phantom Hub"
 ScriptTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 ScriptTitle.Font = Enum.Font.SourceSansBold
@@ -149,8 +149,8 @@ TitleStroke.Thickness = 1
 TitleStroke.Parent = ScriptTitle
 
 local CloseBtn = Instance.new("TextButton")
-CloseBtn.Size = UDim2.new(0.058, 0, 0.6, 0)
-CloseBtn.Position = UDim2.new(0.924, 0, 0.2, 0)
+CloseBtn.Size = UDim2.new(0.1, 0, 0.8, 0)
+CloseBtn.Position = UDim2.new(0.88, 0, 0.1, 0)
 CloseBtn.BackgroundTransparency = 1
 CloseBtn.Text = "X"
 CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -165,15 +165,15 @@ UICornerClose.CornerRadius = UDim.new(0, 0)
 UICornerClose.Parent = CloseBtn
 
 local SideBar = Instance.new("Frame")
-SideBar.Size = UDim2.new(0.254, 0, 0.859, 0)
-SideBar.Position = UDim2.new(0, 0, 0.141, 0)
+SideBar.Size = UDim2.new(0.25, 0, 0.85, 0)
+SideBar.Position = UDim2.new(0, 0, 0.15, 0)
 SideBar.BackgroundTransparency = 1
 SideBar.Parent = InnerFrame
 SideBar.ZIndex = 999999
 
 local MainContent = Instance.new("ScrollingFrame")
-MainContent.Size = UDim2.new(0.746, 0, 0.859, 0)
-MainContent.Position = UDim2.new(0.254, 0, 0.141, 0)
+MainContent.Size = UDim2.new(0.75, -10, 0.85, -10)
+MainContent.Position = UDim2.new(0.25, 5, 0.15, 5)
 MainContent.BackgroundTransparency = 1
 MainContent.ScrollBarThickness = 2
 MainContent.CanvasSize = UDim2.new(0, 0, 0, 0)
@@ -197,7 +197,7 @@ local function showNotification(title, iconId, duration)
 	local notificationGui = Instance.new("Frame")
 	notificationGui.Name = "NotificationGui"
 	notificationGui.Size = UDim2.new(0.3, 0, 0.12, 0)
-	notificationGui.Position = UDim2.new(1.02, 0, 1.05, 0)
+	notificationGui.Position = UDim2.new(0.98, 0, 0.92, 0)
 	notificationGui.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 	notificationGui.BorderSizePixel = 2
 	notificationGui.BorderColor3 = Color3.fromRGB(128, 128, 128)
@@ -206,8 +206,8 @@ local function showNotification(title, iconId, duration)
 
 	local notificationIcon = Instance.new("ImageLabel")
 	notificationIcon.Name = "NotificationIcon"
-	notificationIcon.Size = UDim2.new(0.133, 0, 0.667, 0)
-	notificationIcon.Position = UDim2.new(0.033, 0, 0.167, 0)
+	notificationIcon.Size = UDim2.new(0.15, 0, 0.8, 0)
+	notificationIcon.Position = UDim2.new(0.02, 0, 0.1, 0)
 	notificationIcon.BackgroundTransparency = 1
 	notificationIcon.Image = "rbxassetid://" .. iconId
 	notificationIcon.Parent = notificationGui
@@ -216,7 +216,7 @@ local function showNotification(title, iconId, duration)
 	local notificationLabel = Instance.new("TextLabel")
 	notificationLabel.Name = "NotificationLabel"
 	notificationLabel.Size = UDim2.new(0.8, 0, 1, 0)
-	notificationLabel.Position = UDim2.new(0.167, 0, 0, 0)
+	notificationLabel.Position = UDim2.new(0.18, 0, 0, 0)
 	notificationLabel.BackgroundTransparency = 1
 	notificationLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 	notificationLabel.TextSize = 14
@@ -229,7 +229,7 @@ local function showNotification(title, iconId, duration)
 
 	local progressLine = Instance.new("Frame")
 	progressLine.Name = "ProgressLine"
-	progressLine.Size = UDim2.new(0, 0, 0.033, 0)
+	progressLine.Size = UDim2.new(0, 0, 0.06, 0)
 	progressLine.Position = UDim2.new(0, 0, 1, 0)
 	progressLine.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	progressLine.BorderSizePixel = 0
@@ -237,7 +237,7 @@ local function showNotification(title, iconId, duration)
 	progressLine.ZIndex = 999999
 
 	local startTime = tick()
-	local totalWidth = notificationGui.AbsoluteSize.X
+	local totalWidth = 1
 	local notificationId = tostring(math.random(100000, 999999))
 
 	notificationTimers[notificationId] = {
@@ -250,7 +250,7 @@ local function showNotification(title, iconId, duration)
 	local slideInTween = TweenService:Create(
 		notificationGui,
 		TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-		{Position = UDim2.new(0.68, 0, 1.05, 0)}
+		{Position = UDim2.new(0.68, 0, 0.92, 0)}
 	)
 	slideInTween:Play()
 
@@ -265,7 +265,7 @@ local function showNotification(title, iconId, duration)
 		local progress = math.min(elapsed / notificationTimers[notificationId].duration, 1)
 
 		if notificationGui and notificationGui.Parent then
-			progressLine.Size = UDim2.new(progress, 0, 0.033, 0)
+			progressLine.Size = UDim2.new(totalWidth * progress, 0, 0.06, 0)
 		end
 
 		if progress >= 1 then
@@ -275,7 +275,7 @@ local function showNotification(title, iconId, duration)
 				local slideOutTween = TweenService:Create(
 					notificationGui,
 					TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-					{Position = UDim2.new(1.02, 0, 1.05, 0)}
+					{Position = UDim2.new(0.98, 0, 0.92, 0)}
 				)
 				slideOutTween:Play()
 
@@ -295,8 +295,8 @@ end
 
 local function createTabBtn(name, posIdx, iconId)
     local Btn = Instance.new("TextButton")
-    Btn.Size = UDim2.new(0.85, 0, 0.078, 0)
-    Btn.Position = UDim2.new(0.075, 0, 0.039 + (posIdx * 0.098), 0)
+    Btn.Size = UDim2.new(0.9, 0, 0.15, 0)
+    Btn.Position = UDim2.new(0.05, 0, 0.05 + (posIdx * 0.18), 0)
     Btn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     Btn.Text = ""
@@ -314,8 +314,8 @@ local function createTabBtn(name, posIdx, iconId)
     BtnContainer.ZIndex = 999999
 
     local IconLabel = Instance.new("ImageLabel")
-    IconLabel.Size = UDim2.new(0.3, 0, 0.6, 0)
-    IconLabel.Position = UDim2.new(0.055, 0, 0.2, 0)
+    IconLabel.Size = UDim2.new(0.35, 0, 0.7, 0)
+    IconLabel.Position = UDim2.new(0.08, 0, 0.15, 0)
     IconLabel.BackgroundTransparency = 1
     IconLabel.Image = "rbxasset://textures/Cursors/MouseLockedCursor.png"
     if iconId then
@@ -325,14 +325,14 @@ local function createTabBtn(name, posIdx, iconId)
     IconLabel.ZIndex = 999999
 
     local TextLabel = Instance.new("TextLabel")
-    TextLabel.Size = UDim2.new(0.7, 0, 1, 0)
-    TextLabel.Position = UDim2.new(0.28, 0, 0, 0)
+    TextLabel.Size = UDim2.new(0.6, 0, 1, 0)
+    TextLabel.Position = UDim2.new(0.4, 0, 0, 0)
     TextLabel.BackgroundTransparency = 1
     TextLabel.Text = name
     TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     TextLabel.TextXAlignment = Enum.TextXAlignment.Left
     TextLabel.Font = Enum.Font.SourceSansBold
-    TextLabel.TextSize = 18
+    TextLabel.TextSize = 14
     TextLabel.Parent = BtnContainer
     TextLabel.ZIndex = 999999
 
@@ -354,11 +354,9 @@ local function repositionElements(tab)
         end
     end
     
+    MainContent.CanvasSize = UDim2.new(0, 0, 0, yPos + 50)
     if tab == "Main" then
-        MainContent.CanvasSize = UDim2.new(0, 0, 0, yPos + 50)
         MainContent.CanvasPosition = Vector2.new(0, 0)
-    else
-        MainContent.CanvasSize = UDim2.new(0, 0, 0, yPos + 50)
     end
 end
 
@@ -398,7 +396,7 @@ local function createOption(name, startActive, tab, callback)
     Label.BackgroundTransparency = 1
     Label.TextXAlignment = Enum.TextXAlignment.Left
     Label.Font = Enum.Font.SourceSans
-    Label.TextSize = 16
+    Label.TextSize = 14
     Label.Parent = Container
     Label.ZIndex = 999999
 
@@ -496,7 +494,7 @@ local function createSlider(name, min, max, default, tab, callback)
     Label.BackgroundTransparency = 1
     Label.TextXAlignment = Enum.TextXAlignment.Left
     Label.Font = Enum.Font.SourceSans
-    Label.TextSize = 16
+    Label.TextSize = 14
     Label.Parent = Container
     Label.ZIndex = 999999
 
@@ -591,7 +589,7 @@ local function createInfoBox(title, desc, tab, isButton, linkToCopy)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     TitleLabel.Font = Enum.Font.SourceSansBold
-    TitleLabel.TextSize = 16
+    TitleLabel.TextSize = 14
     TitleLabel.Parent = Container
     TitleLabel.ZIndex = 999999
 
@@ -646,7 +644,7 @@ local function createSpecialButton(name, tab, callback)
     Label.BackgroundTransparency = 1
     Label.TextXAlignment = Enum.TextXAlignment.Center
     Label.Font = Enum.Font.SourceSans
-    Label.TextSize = 16
+    Label.TextSize = 14
     Label.Parent = Container
     Label.ZIndex = 999999
 
